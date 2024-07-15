@@ -12,7 +12,6 @@ router.post('/upload', (req, res) => {
       return res.status(400).json({ message: 'No file selected' });
     }
     
-    // Save file metadata to MongoDB
     const newFile = new File({
       filename: req.file.filename,
       path: req.file.path,
