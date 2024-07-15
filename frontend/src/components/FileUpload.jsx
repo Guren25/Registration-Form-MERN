@@ -5,10 +5,22 @@ const FileUpload = () => {
   const [file, setFile] = useState('');
   const [filename, setFilename] = useState('Choose File');
   const [uploadedFile, setUploadedFile] = useState({});
+  const [preview, setPreview] = useState('');
 
   const onChange = (e) => {
-    setFile(e.target.files[0]);
-    setFilename(e.target.files[0].name);
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    setFilename(selectedFile.name);
+    
+    const fileReader = new FileReader();
+    fileReader.onloadend = () => {
+      setPreview(fileReader.result);
+    };
+    if (selectedFile) {
+      fileReader.readAsDataURL(selectedFile);
+    } else {
+      setPreview('');
+    }
   };
 
   const onSubmit = async (e) => {
@@ -24,7 +36,6 @@ const FileUpload = () => {
       });
 
       const { file } = res.data;
-
       setUploadedFile({ file });
       alert('File Uploaded');
     } catch (err) {
@@ -38,6 +49,18 @@ const FileUpload = () => {
 
   return (
     <div>
+      {preview && (
+        <div>
+          <h3>Image Preview:</h3>
+          <img src={preview} alt="Preview" style={{ width: '200px', height: 'auto' }} />
+        </div>
+      )}
+      {uploadedFile.file && (
+        <div>
+          <h3>{uploadedFile.file}</h3>
+          <img src={`/${uploadedFile.file}`} alt="" />
+        </div>
+      )}
       <form onSubmit={onSubmit}>
         <div>
           <input type="file" onChange={onChange} />
@@ -45,12 +68,6 @@ const FileUpload = () => {
         </div>
         <input type="submit" value="Upload" />
       </form>
-      {uploadedFile ? (
-        <div>
-          <h3>{uploadedFile.file}</h3>
-          <img src={`/${uploadedFile.file}`} alt="" />
-        </div>
-      ) : null}
     </div>
   );
 };
