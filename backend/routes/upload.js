@@ -16,13 +16,15 @@ router.post('/upload', (req, res) => {
       filename: req.file.filename,
       path: req.file.path,
       size: req.file.size,
+      name: req.body.name,
+      motto: req.body.motto
     });
 
     try {
       await newFile.save();
       res.status(200).json({
         message: 'File uploaded successfully',
-        file: `uploads/${req.file.filename}`, // Adjust path if necessary
+        file: `uploads/${req.file.filename}`,
       });
     } catch (error) {
       res.status(500).json({ message: 'Error saving file to database' });

@@ -4,10 +4,12 @@ const dotenv = require('dotenv');
 const path = require('path');
 const uploadRoute = require('./routes/upload');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 dotenv.config();
 
 const app = express();
+app.use(bodyParser.json());
 app.use(cors());
 
 const connectDB = async () => {
