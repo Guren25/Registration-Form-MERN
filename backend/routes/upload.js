@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const upload = require('../middleware/fileUpload');
+const upload = require('../middleware/FileUpload');
 const File = require('../models/File');
+const multer = require('multer');
 
 router.post('/upload', (req, res) => {
   upload(req, res, async (err) => {
@@ -48,24 +49,6 @@ router.get('/:id', async (req, res) => {
     res.json(file);
   } catch (err) {
     res.status(500).json({ message: err.message });
-  }
-});
-
-router.put('/:id', upload.single('imgUrl'), async (req, res) => {
-  try {
-    const file = await File.findById(req.params.id);
-    if (!file) return res.status(404).json({ message: 'Record not found' });
-
-    file.name = req.body.name || file.name;
-    file.motto = req.body.motto || file.motto;
-    if (req.file) {
-      item.imgUrl = `/uploads/${req.file.filename}`;
-    }
-    
-    const updatedFile = await file.save();
-    res.json(updatedItem);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
   }
 });
 
