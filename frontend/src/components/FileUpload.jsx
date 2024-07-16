@@ -31,17 +31,18 @@ const FileUpload = () => {
     formData.append('myFile', file);
     formData.append('name', name);
     formData.append('motto', motto);
-
+  
     try {
       const res = await axios.post('/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-
+  
       const { file } = res.data;
       setUploadedFile({ file });
       alert('File Uploaded');
+      window.location.reload();
     } catch (err) {
       if (err.response.status === 500) {
         console.log('There was a problem with the server');
@@ -50,7 +51,6 @@ const FileUpload = () => {
       }
     }
   };
-
   return (
     <div>
       {preview && (
